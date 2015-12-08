@@ -1,0 +1,66 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div>
+    <!-- What I intend to do here is have a panel-default class for each individual "page".  A "page" is like a page out of
+        a general ledger. Each page will belong to a specific date. On each page will be the transactions, with all their
+        debits and credits for that date. -->
+    <h2>Showing transactions from (date)</h2>
+    <div class="panel panel-default" style="margin-left:10%; margin-right:10%;">
+        <table class="table table-striped">
+        <tr>
+            <th>Transaction Number</th>
+            <th>Account Number</th>
+            <th>Amount</th>
+            <th>Account Balance</th>
+        </tr>
+        </table>
+    </div>
+    <div class="panel panel-default" style="margin-left:10%; margin-right:10%;">
+        <table class="table table-striped">
+        <tr>
+            <td>Transaction: <a>12345678</a></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Cash</td>
+            <td><small style="font-style:italic;">dr </small>$500</td>
+            <td>$10,000</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="padding-left:3%;">Accounts Recievable</td>
+            <td><small style="font-style:italic;">cr </small style="font-style:italic;">$500</td>
+            <td>$1,000</td>
+        </tr>
+        </table>
+    </div>
+    <div class="panel panel-default" style="margin-left:10%; margin-right:10%;">
+        <table class="table table-striped">
+        <tr>
+            <td>Transaction: <a>78945646</a></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>PPE</td>
+            <td><small style="font-style:italic;">dr </small>$12,000</td>
+            <td>$102,000</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="padding-left:3%;">Long-Term Liabilities</td>
+            <td><small style="font-style:italic;">cr </small>$12,000</td>
+            <td>$84,000</td>
+        </tr>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+{% if job_spec %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title info">{{ cust.name }} - {{ job_spec.description }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="info">Address:&nbsp;</h4><h5 class="info">{{ job_spec.address }}</h5><br />
+                        <h4 class="info">City:&nbsp;</h4><h5 class="info">{{ job_spec.city }}</h5>
+                        <h4 class="info">State:&nbsp;</h4><h5 class="info">{{ job_spec.state }}</h5>
+                        <h4 class="info">Zip:&nbsp;</h4><h5 class="info">{{ job_spec.zip }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                        <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#jobEditModal">Edit Job Info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-12">
+	    <div class="well">
+		    <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#invFormModal">Add Invoices +</button>
+		    <table class="table table-condensed table-hover table-striped grid-basic">
+			    <thead>
+			    <tr>
+				    <th data-column-id="invDesc">Description</th>
+				    <th data-column-id="invDateCreated">Date Created</th>
+				    <th data-column-id="invAmount">Amount</th>
+				    <th data-column-id="invActive">Active?</th>
+                    <th data-column-id="invEdit">Edit</th>
+			    </tr>
+			    </thead>
+			    <tbody>
+			    {% for inv in invs %}
+			    <tr>
+				    <td>{{ inv.description }} </td>
+				    <td>{{ inv.createdate }}</td>
+				    <td>${{ inv.amount }}</td>
+				    <td>{{ inv.active }}</td>
+                    <td><a class="btn btn-primary" href="{% url 'invoice' inv.jobid.jobid inv.invoiceid %}">View</a></td>
+
+			    </tr>
+			    {% endfor %}
+			    </tbody>
+		    </table>
+	    </div>
+    </div>
+</div>
+
+<!-- Modal window for adding a new invoice-->
+<div class="modal fade" id="invFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Invoice for {{ job_spec.description }}</h4>
+      </div>
+      <form data-parsley-validate method="post" action="{% url 'job' cust.custid job_spec.jobid %}">{% csrf_token %}
+        <div class="modal-body">
+            {{ inv_form.as_p }}
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="new_invoice">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal window for editing the current job-->
+<div class="modal fade" id="jobEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Info for {{ job_spec.description }}</h4>
+            </div>
+            <form data-parsley-validate method="post" action="{% url 'job' cust.custid job_spec.jobid %}">{% csrf_token %}
+                <div class="modal-body">
+                    {{ job_form_edit.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="edit_job">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

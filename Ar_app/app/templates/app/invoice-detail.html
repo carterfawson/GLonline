@@ -1,0 +1,75 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title info">Invoice Number: #{{ inv_spec.jobid}} - {{ inv_spec.invoiceid }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="info">Description:&nbsp;</h4><h5 class="info">{{ inv_spec.description }}</h5><br />
+                        <h4 class="info">Date Created:&nbsp;</h4><h5 class="info">{{ inv_spec.createdate }}</h5>
+                        <h4 class="info">Date Closed:&nbsp;</h4><h5 class="info">{{ inv_spec.closedate }}</h5>
+                        <h4 class="info">Amount:&nbsp;</h4><h5 class="info">${{ inv_spec.amount }}</h5>
+                        <h4 class="info">Active:&nbsp;</h4><h5 class="info">{{ inv_spec.active }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                        <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#invEditModal">Edit Invoice</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal window for editing the current job-->
+{% if flag %}
+<div class="modal fade" id="invEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit {{inv_spec.jobid}} - {{ inv_spec.description }}</h4>
+            </div>
+            <form data-parsley-validate method="post" action="{% url 'invoice' inv_spec.jobid.jobid inv_spec.invoiceid %}">{% csrf_token %}
+                <div class="modal-body">
+                    {{ invformedit.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="edit_invoice">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="modal fade" id="invEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit {{inv_spec.jobid}} - {{ inv_spec.description }}</h4>
+            </div>
+            <form data-parsley-validate method="post" action="{% url 'invoice' inv_spec.jobid.jobid inv_spec.invoiceid %}">{% csrf_token %}
+                <div class="modal-body">
+                    {{ invformeditsimple.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="edit_invoice_simple">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

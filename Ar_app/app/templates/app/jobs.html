@@ -1,0 +1,112 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<!-- This is where the code for all of the page elements exists -->
+{% if cust %}
+<div class="row">
+    <div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title info">{{ cust.name }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4 class="info">Contact Name:&nbsp;</h4><h5 class="info">{{ cust.contactName}}</h5><br />
+                        <h4 class="info">Phone:&nbsp;</h4><h5 class="info">{{ cust.phone }}</h5><br />
+                        <h4 class="info">Contact Email:&nbsp;</h4><h5 class="info">{{ cust.email }}</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="info">Address:&nbsp;</h4><h5 class="info">{{ cust.address }}</h5><br />
+                        <h4 class="info">City:&nbsp;</h4><h5 class="info">{{ cust.city }}</h5>
+                        <h4 class="info">State:&nbsp;</h4><h5 class="info">{{ cust.state }}</h5>
+                        <h4 class="info">Zip:&nbsp;</h4><h5 class="info">{{ cust.zip }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                        <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#cusEditModal">Edit Customer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-lg-12">
+	    <div class="well">
+		    <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-target="#jobFormModal">Add Job +</button>
+		    <table class="table table-condensed table-hover table-striped grid-basic">
+			    <thead>
+			    <tr>
+				    <th data-column-id="jobClient">Customer</th>
+				    <th data-column-id="jobDesc">Job Description</th>
+				    <th data-column-id="jobAddress">Address</th>
+				    <th data-column-id="jobZip">Zip</th>
+                    <th data-column-id="jobAdd"></th>
+			    </tr>
+			    </thead>
+			    <tbody>
+			    {% for job in jobs %}
+			    <tr>
+				    <td>{{ job.custid}}</td>
+				    <td>{{ job.description }} </td>
+				    <td>{{ job.address }}</td>
+				    <td>{{ job.zip }}</td>
+                    <td><a class="btn btn-primary" href="{% url 'job' job.custid.custid job.jobid %}">View</a></td>
+			    </tr>
+			    {% endfor %}
+			    </tbody>
+		    </table>
+
+	    </div>
+    </div>
+</div>
+
+<!-- This is where the code for the modal windows exists -->
+<!-- Modal window for adding a new job-->
+<div class="modal fade" id="jobFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Job for {{ cust.name }}</h4>
+      </div>
+	    <form data-parsley-validate method="POST" action="{% url 'customer' cust.custid %}">{% csrf_token %}
+        <div class="modal-body">
+            {{ job_form.as_p }}
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="new_job">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal window for editing the current customer-->
+<div class="modal fade" id="cusEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+            </div>
+            <form data-parsley-validate method="POST" action="{% url 'customer' cust.custid %}">{% csrf_token %}
+                <div class="modal-body">
+                    {{ cus_form_edit.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="edit_customer">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

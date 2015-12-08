@@ -1,0 +1,96 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<!-- This is where the code for all of the page elements exists -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="well">
+            <table id="grid-basic" class="table table-condensed table-hover table-striped">
+            <thead>
+                <tr>
+                    <th data-column-id="jobDesc">Job Description</th>
+	                <th data-column-id="jobAddress">Address</th>
+                    <th data-column-id="jobZip">Zip</th>
+	                <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.description }} </td>
+	                <td>{{ job.address }}</td>
+                    <td>{{ job.zip }}</td>
+	                <td><a href="{% url 'invoices' job.jobid %}">Add Invoice +</a></td>
+                </tr>
+               {% endfor %}
+            </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#jobFormModal">Add Job +</button>
+        </div>
+    </div>
+    <!--<div class="col-lg-7">
+        <div class="well">
+            <h3>Showing Estimates for {{ name }} - {{ jobid }}</h3>
+            <table id="grid-nosearch1" class="table table-condensed table-hover table-striped">
+            <thead>
+                <tr>
+                    <th data-column-id="estimateCode">Estimate ID</th>
+                    <th data-column-id="estimateZip">Zip Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="estimate_row">
+                    <td>100</td>
+                    <td>{{ zip }}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        <div class="well">
+            <p>Showing Invoices for {{ name }} - {{ jobid }}</>
+            <table id="grid-nosearch2" class="table table-condensed table-hover table-striped">
+            <thead>
+                <tr>
+                    <th data-column-id="invoiceCode">Invoice ID</th>
+                    <th data-column-id="invoiceZip">Zip Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>100-1</td>
+                    <td>{{ zip }}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>-->
+</div>
+
+<!-- This is where the code for the modal windows exists -->
+
+<div class="modal fade" id="jobFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Job</h4>
+      </div>
+      <form method="post" action="{% url 'receivables' %}">{% csrf_token %}
+        <div class="modal-body">
+            <ul>
+                {{ job_form.as_ul }}
+            </ul>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<p>Use this area to provide additional information.</p>
+
+{% endblock %}
